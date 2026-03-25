@@ -52,30 +52,62 @@ public class APrefijo<E> {
         return new LinkedList<>();
     }
 
-    public LinkedList<E> findPrefix(String s) {
+    public LinkedList<E> findPrefix(String prefijo) {
         LinkedList<E> resultado = new LinkedList<>();
-        int i = 0;
-        APrefijo<E> p = this;
+        APrefijo<E> actual = this;
 
-        while (i < s.length()) {
-            p = p.hijos.get(s.charAt(i));
-            if (p == null) {
-                return new LinkedList<>();
+        for (int i = 0; i < prefijo.length(); i++) {
+            char letra = prefijo.charAt(i);
+            actual = actual.hijos.get(letra);
+
+            if (actual == null) {
+                return resultado;
             }
-            i++;
         }
+        recolectar(actual, resultado);
 
-        p.recorrePrefifo(resultado);
         return resultado;
     }
 
-    private void recorrePrefifo(LinkedList<E> lResultado) {
-        if (finNombre) {
-            lResultado.addAll(datos);
+    private void recolectar(APrefijo<E> nodo, LinkedList<E> resultado) {
+        if (nodo.finNombre) {
+            resultado.addAll(nodo.datos);
         }
-        for (Map.Entry<Character, APrefijo<E>> entry : hijos.entrySet()) {
-            APrefijo<E> hijo = entry.getValue();
-            hijo.recorrePrefifo(lResultado);
+        for (Character c : nodo.hijos.keySet()) {
+            recolectar(nodo.hijos.get(c), resultado);
         }
+    }
+
+    public void eliminar(String palabra) {
+        eliminarRec(palabra, 0);
+    }
+
+    private boolean eliminarRec(String palabra, int i) {
+        if (i == palabra.length()) {
+            if (!finNombre) {
+                return false;
+            }
+
+            finNombre = false;
+            datos.clear();
+
+            return hijos.isEmpty();
+        }
+
+        char letra = palabra.charAt(i);
+        APrefijo<E> hijo = hijos.get(letra);
+
+        if (hijo == null) {
+            return false;
+        }
+
+        boolean debeEliminarHijo = hijo.eliminarRec(palabra, i + 1);
+
+        if (debeEliminarHijo) {
+            hijos.remove(letra);
+            return hijos.isEmpty() && !finNombre;
+        }
+
+        return false;
     }
 }
