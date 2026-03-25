@@ -3,79 +3,79 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class APrefijo<E> {
-    Map<Character, APrefijo> hijos;
+    Map<Character, APrefijo<E>> hijos;
     boolean finNombre;
     LinkedList<E> datos;
-    
+
     public APrefijo() {
         hijos = new HashMap<>();
         finNombre = false;
         datos = new LinkedList<>();
     }
-    
+
     public void insertar(String palabra, E dato) {
-        APrefijo<E> nodo = this;
-        
-        for (int i = 0; i < palabra.length(); i++) {
-            char letra = palabra.charAt(i);
-            
-            if (!nodo.hijos.containsKey(letra)) {
-                nodo.hijos.put(letra, new APrefijo<E>());
-            }
-            
-            nodo = (APrefijo<E>) nodo.hijos.get(letra);
-        }
-        
-        nodo.finNombre = true;
-        nodo.datos.add(dato);
+        insertarRec(palabra, dato, 0);
     }
-    
+
+    private void insertarRec(String palabra, E dato, int i) {
+        if (i == palabra.length()) {
+            finNombre = true;
+            datos.add(dato);
+            return;
+        }
+
+        char letra = palabra.charAt(i);
+        APrefijo<E> hijo = hijos.get(letra);
+
+        if (hijo == null) {
+            hijo = new APrefijo<>();
+            hijos.put(letra, hijo);
+        }
+        hijo.insertarRec(palabra, dato, i + 1);
+    }
+
     public LinkedList<E> buscar(String palabra) {
-        APrefijo<E> nodo = this;
-        
+        APrefijo<E> actual = this;
+
         for (int i = 0; i < palabra.length(); i++) {
             char letra = palabra.charAt(i);
-            
-            APrefijo<E> nodoSiguiente = (APrefijo<E>) nodo.hijos.get(letra);
-            
-            if (nodoSiguiente == null) {
+            APrefijo<E> hijo = actual.hijos.get(letra);
+            if (hijo == null) {
                 return new LinkedList<>();
             }
-            
-            nodo = nodoSiguiente;
+            actual = hijo;
         }
-        
-        if (nodo.finNombre) {
-            return nodo.datos;
-        } else {
-            return new LinkedList<>();
+        if (actual.finNombre) {
+            return actual.datos;
         }
+
+        return new LinkedList<>();
     }
-    
-    public LinkedList<String> buscarPrefijo(String prefijo) {
-        APrefijo<E> nodo = this;
-        LinkedList<String> resultado = new LinkedList<>();
-        for (int i = 0; i < prefijo.length(); i++) {
-            char letra = prefijo.charAt(i);
-            
-            if (!nodo.hijos.containsKey(letra)) {
-                return resultado; 
-            }   
-            nodo = (APrefijo<E>) nodo.hijos.get(letra);
+
+    public LinkedList<E> findPrefix(String s) {
+        LinkedList<E> resultado = new LinkedList<>();
+        int i = 0;
+        APrefijo<E> p = this;
+
+        while (i < s.length()) {
+            p = p.hijos.get(s.charAt(i));
+            if (p == null) {
+                return new LinkedList<>();
+            }
+            i++;
         }
-        recopilarPalabras(nodo, prefijo, resultado);
+
+        p.recorrePrefifo(resultado);
         return resultado;
     }
-    
-    private void recopilarPalabras(APrefijo<E> nodo, String palabraActual, LinkedList<String> resultado) {
-        if (nodo.finNombre) {
-            resultado.add(palabraActual);
+
+    private void recorrePrefifo(LinkedList<E> lResultado) {
+        if (finNombre) {
+            lResultado.addAll(datos);
         }
-        
-        for (Map.Entry<Character, APrefijo> entrada : nodo.hijos.entrySet()) {
-            char letra = entrada.getKey();
-            APrefijo<E> hijo = entrada.getValue();
-            recopilarPalabras(hijo, palabraActual + letra, resultado);
+        for (Map.Entry<Character, APrefijo<E>> entry : hijos.entrySet()) {
+            APrefijo<E> hijo = entry.getValue();
+            hijo.recorrePrefifo(lResultado);
         }
     }
 }
