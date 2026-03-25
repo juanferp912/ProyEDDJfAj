@@ -1,0 +1,12 @@
+Julián,Álvarez,Araña,3005551234,14456789,julian.alvarez@riverplate.com
+Santiago,Lencina,Santi,3105551111,14451111,santiago.lencina@riverplate.com
+Hernán,López,Hernan,3015552222,14452222,hernan.lopez@riverplate.com
+Ian,Subiabre,Ian,3025553333,14453333,ian.subiabre@riverplate.com
+Rafael,Santos Borré,Rafa,3035554444,14454444,rafael.borres@riverplate.com
+Marcelo,Barovero,Trapito,3045555555,14455555,marcelo.barovero@riverplate.com
+Enzo,Fernández,Euro,3055556666,14456666,enzo.fernandez@riverplate.com
+Gonzalo,Montiel,Cache,3065557777,14457777,gonzalo.montiel@riverplate.com
+Rodrigo,Mora,Rodri,3075558888,14458888,rodrigo.mora@riverplate.com
+Joaquín,Freitas,Joaco,3085559999,14459999,joaquin.freitas@riverplate.com
+Ariel,Ortega,Burrito,3095550000,14450000,ariel.ortega@riverplate.com
+Andrés,D'Alessandro,Cabezon,3105551010,14451010,andres.dallessandro@riverplate.com
