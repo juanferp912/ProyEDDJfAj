@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Agenda {
@@ -59,6 +60,21 @@ public class Agenda {
             System.out.println("Cargados: " + cargados + " | Duplicados evitados: " + duplicados);
         } catch (IOException e) {
             System.out.println("Error al cargar archivo: " + e.getMessage());
+        }
+    }
+
+    public void exportarContactosAArchivo(String ruta) {
+        try (FileWriter fw = new FileWriter(ruta)) {
+            LinkedList<Contacto> todos = arbol.obtenerTodos();
+            
+            for (Contacto c : todos) {
+                fw.write(c.nombre + "," + c.apellido + "," + c.apodo + "," + 
+                         c.telefonoMovil + "," + c.telefonoConvencional + "," + c.correoElectronico + "\n");
+            }
+            
+            System.out.println("Se exportaron " + todos.size() + " contactos al archivo.");
+        } catch (IOException e) {
+            System.out.println("Error al exportar: " + e.getMessage());
         }
     }
 }

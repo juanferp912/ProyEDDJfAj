@@ -15,7 +15,8 @@ public class Main {
                 System.out.println("2. Insertar contacto");
                 System.out.println("3. Buscar por prefijo");
                 System.out.println("4. Eliminar contacto");
-                System.out.println("5. Salir");
+                System.out.println("5. Exportar contactos a archivo");
+                System.out.println("6. Salir");
                 System.out.print("Seleccione una opción: ");
                 
                 opcion = sc.nextInt();
@@ -35,6 +36,9 @@ public class Main {
                         eliminarContacto();
                         break;
                     case 5:
+                        exportarContactos();
+                        break;
+                    case 6:
                         System.out.println("¡Hasta luego!");
                         System.exit(0);
                     default:
@@ -137,6 +141,20 @@ public class Main {
             System.out.println("Contacto eliminado exitosamente.");
         } catch (Exception e) {
             System.out.println("Error al eliminar contacto.");
+        }
+    }
+
+    static void exportarContactos() {
+        try {
+            System.out.print("Ingrese nombre del archivo para exportar (ej: backup.txt): ");
+            String ruta = sc.nextLine();
+            if (ruta.isEmpty()) {
+                System.out.println("El nombre no puede estar vacío.");
+                return;
+            }
+            agenda.exportarContactosAArchivo(ruta);
+        } catch (Exception e) {
+            System.out.println("Error al exportar contactos.");
         }
     }
 }

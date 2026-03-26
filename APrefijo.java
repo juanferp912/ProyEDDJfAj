@@ -78,6 +78,12 @@ public class APrefijo<E> {
         }
     }
 
+    public LinkedList<E> obtenerTodos() {
+        LinkedList<E> todos = new LinkedList<>();
+        recolectar(this, todos);
+        return todos;
+    }
+
     public void eliminar(String palabra) {
         eliminarRec(palabra, 0);
     }
