@@ -29,14 +29,34 @@ public class Agenda {
     public void cargarContactosDesdeArchivo(String ruta) {
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String linea;
+            int cargados = 0;
+            int duplicados = 0;
+            
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
                 if (datos.length == 6) {
                     Contacto c = new Contacto(datos[0], datos[1], datos[2], datos[3], datos[4], datos[5]);
-                    insertarContacto(c);
+                    
+                    // Verificar si el contacto ya existe
+                    LinkedList<Contacto> existentes = arbol.buscar(c.nombre);
+                    boolean existe = false;
+                    
+                    for (Contacto ex : existentes) {
+                        if (ex.nombre.equals(c.nombre) && ex.apellido.equals(c.apellido) && ex.apodo.equals(c.apodo)) {
+                            existe = true;
+                            duplicados++;
+                            break;
+                        }
+                    }
+                    
+                    if (!existe) {
+                        insertarContacto(c);
+                        cargados++;
+                    }
                 }
             }
-            System.out.println("Contactos cargados exitosamente.");
+            
+            System.out.println("Cargados: " + cargados + " | Duplicados evitados: " + duplicados);
         } catch (IOException e) {
             System.out.println("Error al cargar archivo: " + e.getMessage());
         }
