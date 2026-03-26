@@ -59,7 +59,8 @@ public class Main {
                 System.out.println("La ruta no puede estar vacía.");
                 return;
             }
-            agenda.cargarContactosDesdeArchivo(ruta);
+            String resultado = agenda.cargarContactosDesdeArchivo(ruta);
+            System.out.println(resultado);
         } catch (Exception e) {
             System.out.println("Error al cargar archivo.");
         }
@@ -106,9 +107,25 @@ public class Main {
             if (resultados.isEmpty()) {
                 System.out.println("No se encontraron contactos.");
             } else {
+                // Incrementar frecuencia de cada contacto encontrado
+                for (Contacto c : resultados) {
+                    c.frecuencia++;
+                }
+                
+                // Ordenar por frecuencia (burbuja sort)
+                for (int i = 0; i < resultados.size(); i++) {
+                    for (int j = 0; j < resultados.size() - 1 - i; j++) {
+                        if (resultados.get(j).frecuencia < resultados.get(j + 1).frecuencia) {
+                            Contacto temp = resultados.get(j);
+                            resultados.set(j, resultados.get(j + 1));
+                            resultados.set(j + 1, temp);
+                        }
+                    }
+                }
+                
                 System.out.println("\nResultados encontrados:");
                 for (Contacto c : resultados) {
-                    System.out.println(c);
+                    System.out.println(c + " [Búsquedas: " + c.frecuencia + "]");
                 }
             }
         } catch (Exception e) {
@@ -152,7 +169,8 @@ public class Main {
                 System.out.println("El nombre no puede estar vacío.");
                 return;
             }
-            agenda.exportarContactosAArchivo(ruta);
+            String resultado = agenda.exportarContactosAArchivo(ruta);
+            System.out.println(resultado);
         } catch (Exception e) {
             System.out.println("Error al exportar contactos.");
         }

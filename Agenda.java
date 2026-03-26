@@ -6,28 +6,50 @@ import java.io.IOException;
 
 public class Agenda {
     APrefijo<Contacto> arbol;
+    LinkedList<Contacto> todosContactos;
 
     public Agenda() {
         arbol = new APrefijo<>();
+        todosContactos = new LinkedList<>();
     }
 
     public void insertarContacto(Contacto c) {
         arbol.insertar(c.nombre, c);
         arbol.insertar(c.apellido, c);
         arbol.insertar(c.apodo, c);
+        todosContactos.add(c);
     }
 
     public void eliminarContacto(Contacto c) {
         arbol.eliminar(c.nombre);
         arbol.eliminar(c.apellido);
         arbol.eliminar(c.apodo);
+        todosContactos.remove(c);
+    }
+    
+    public LinkedList<Contacto> obtenerContactosUnicos() {
+        LinkedList<Contacto> unicos = new LinkedList<>();
+        for (Contacto c : todosContactos) {
+            boolean existe = false;
+            for (Contacto u : unicos) {
+                if (u.nombre.equals(c.nombre) && u.apellido.equals(c.apellido) && u.apodo.equals(c.apodo)) {
+                    existe = true;
+                    break;
+                }
+            }
+            if (!existe) {
+                unicos.add(c);
+            }
+        }
+        return unicos;
     }
 
     public LinkedList<Contacto> buscar(String palabra) {
         return arbol.findPrefix(palabra);
     }
 
-    public void cargarContactosDesdeArchivo(String ruta) {
+    public String cargarContactosDesdeArchivo(String ruta) {
+        todosContactos.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
             String linea;
             int cargados = 0;
@@ -57,24 +79,36 @@ public class Agenda {
                 }
             }
             
-            System.out.println("Cargados: " + cargados + " | Duplicados evitados: " + duplicados);
+            String msg = "Cargados: " + cargados + " | Duplicados evitados: " + duplicados;
+            System.out.println(msg);
+            return msg;
         } catch (IOException e) {
-            System.out.println("Error al cargar archivo: " + e.getMessage());
+            String errMsg = "Error al cargar archivo: " + e.getMessage();
+            System.out.println(errMsg);
+            return errMsg;
         }
     }
 
-    public void exportarContactosAArchivo(String ruta) {
+    public String exportarContactosAArchivo(String ruta) {
         try (FileWriter fw = new FileWriter(ruta)) {
-            LinkedList<Contacto> todos = arbol.obtenerTodos();
-            
-            for (Contacto c : todos) {
+            LinkedList<Contacto> contactosExportar = obtenerContactosUnicos();
+            if (contactosExportar.isEmpty()) {
+                String msg = "No hay contactos para exportar.";
+                System.out.println(msg);
+                return msg;
+            }
+            for (Contacto c : contactosExportar) {
                 fw.write(c.nombre + "," + c.apellido + "," + c.apodo + "," + 
                          c.telefonoMovil + "," + c.telefonoConvencional + "," + c.correoElectronico + "\n");
             }
             
-            System.out.println("Se exportaron " + todos.size() + " contactos al archivo.");
+            String msg = "Se exportaron " + contactosExportar.size() + " contactos al archivo.";
+            System.out.println(msg);
+            return msg;
         } catch (IOException e) {
-            System.out.println("Error al exportar: " + e.getMessage());
+            String errMsg = "Error al exportar: " + e.getMessage();
+            System.out.println(errMsg);
+            return errMsg;
         }
     }
 }

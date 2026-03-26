@@ -5,6 +5,7 @@ public class Contacto {
     String telefonoMovil;
     String telefonoConvencional;
     String correoElectronico;
+    int frecuencia;
 
     public Contacto(String nombre, String apellido, String apodo, String telefonoMovil, 
                     String telefonoConvencional, String correoElectronico) {
@@ -14,6 +15,7 @@ public class Contacto {
         this.telefonoMovil = telefonoMovil;
         this.telefonoConvencional = telefonoConvencional;
         this.correoElectronico = correoElectronico;
+        this.frecuencia = 0;
     }
 
     @Override

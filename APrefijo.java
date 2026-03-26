@@ -25,6 +25,7 @@ public class APrefijo<E> {
         }
 
         char letra = palabra.charAt(i);
+        letra = Character.toLowerCase(letra);
         APrefijo<E> hijo = hijos.get(letra);
 
         if (hijo == null) {
@@ -39,6 +40,7 @@ public class APrefijo<E> {
 
         for (int i = 0; i < palabra.length(); i++) {
             char letra = palabra.charAt(i);
+            letra = Character.toLowerCase(letra);
             APrefijo<E> hijo = actual.hijos.get(letra);
             if (hijo == null) {
                 return new LinkedList<>();
@@ -58,6 +60,7 @@ public class APrefijo<E> {
 
         for (int i = 0; i < prefijo.length(); i++) {
             char letra = prefijo.charAt(i);
+            letra = Character.toLowerCase(letra);
             actual = actual.hijos.get(letra);
 
             if (actual == null) {
@@ -101,6 +104,7 @@ public class APrefijo<E> {
         }
 
         char letra = palabra.charAt(i);
+        letra = Character.toLowerCase(letra);
         APrefijo<E> hijo = hijos.get(letra);
 
         if (hijo == null) {
