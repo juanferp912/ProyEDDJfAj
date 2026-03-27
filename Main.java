@@ -141,21 +141,14 @@ public class Main {
             String apellido = sc.nextLine();
             System.out.print("Ingrese apodo: ");
             String apodo = sc.nextLine();
-            System.out.print("Teléfono móvil: ");
-            String movil = sc.nextLine();
-            System.out.print("Teléfono convencional: ");
-            String convencional = sc.nextLine();
-            System.out.print("Correo electrónico: ");
-            String email = sc.nextLine();
 
             if (nombre.isEmpty() || apellido.isEmpty() || apodo.isEmpty()) {
                 System.out.println("Los campos nombre, apellido y apodo no pueden estar vacíos.");
                 return;
             }
 
-            Contacto c = new Contacto(nombre, apellido, apodo, movil, convencional, email);
-            agenda.eliminarContacto(c);
-            System.out.println("Contacto eliminado exitosamente.");
+            String resultado = agenda.eliminarContactoPorDatos(nombre, apellido, apodo);
+            System.out.println(resultado);
         } catch (Exception e) {
             System.out.println("Error al eliminar contacto.");
         }

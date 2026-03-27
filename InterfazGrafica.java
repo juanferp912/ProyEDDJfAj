@@ -152,23 +152,14 @@ public class InterfazGrafica extends JFrame {
         JTextField nombre = new JTextField(15);
         JTextField apellido = new JTextField(15);
         JTextField apodo = new JTextField(15);
-        JTextField movil = new JTextField(15);
-        JTextField conv = new JTextField(15);
-        JTextField email = new JTextField(15);
 
-        JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
         panel.add(new JLabel("Nombre:"));
         panel.add(nombre);
         panel.add(new JLabel("Apellido:"));
         panel.add(apellido);
         panel.add(new JLabel("Apodo:"));
         panel.add(apodo);
-        panel.add(new JLabel("Tel. Móvil:"));
-        panel.add(movil);
-        panel.add(new JLabel("Tel. Conv:"));
-        panel.add(conv);
-        panel.add(new JLabel("Email:"));
-        panel.add(email);
 
         int result = JOptionPane.showConfirmDialog(this, panel, "Eliminar Contacto", 
                                                     JOptionPane.OK_CANCEL_OPTION);
@@ -178,10 +169,8 @@ public class InterfazGrafica extends JFrame {
                     JOptionPane.showMessageDialog(this, "Los campos nombre, apellido y apodo son obligatorios.");
                     return;
                 }
-                Contacto c = new Contacto(nombre.getText(), apellido.getText(), apodo.getText(),
-                                         movil.getText(), conv.getText(), email.getText());
-                agenda.eliminarContacto(c);
-                resultadoArea.setText("Contacto eliminado exitosamente.");
+                String resultado = agenda.eliminarContactoPorDatos(nombre.getText(), apellido.getText(), apodo.getText());
+                resultadoArea.setText(resultado);
             } catch (Exception e) {
                 resultadoArea.setText("Error al eliminar contacto.");
             }

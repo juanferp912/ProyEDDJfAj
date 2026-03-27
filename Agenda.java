@@ -27,6 +27,23 @@ public class Agenda {
         todosContactos.remove(c);
     }
     
+    public String eliminarContactoPorDatos(String nombre, String apellido, String apodo) {
+        // Buscar el contacto en todosContactos
+        for (Contacto c : todosContactos) {
+            if (c.nombre.toLowerCase().equals(nombre.toLowerCase()) && 
+                c.apellido.toLowerCase().equals(apellido.toLowerCase()) && 
+                c.apodo.toLowerCase().equals(apodo.toLowerCase())) {
+                // Encontrado, eliminar
+                arbol.eliminar(c.nombre);
+                arbol.eliminar(c.apellido);
+                arbol.eliminar(c.apodo);
+                todosContactos.remove(c);
+                return "Contacto eliminado exitosamente.";
+            }
+        }
+        return "Contacto no encontrado.";
+    }
+    
     public LinkedList<Contacto> obtenerContactosUnicos() {
         LinkedList<Contacto> unicos = new LinkedList<>();
         for (Contacto c : todosContactos) {
