@@ -3,10 +3,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.Comparator;
 
 public class InterfazGrafica extends JFrame {
     private Agenda agenda;
-    private JTextField inputField;
     private JTextArea resultadoArea;
     private JButton btnCargar, btnInsertar, btnBuscar, btnEliminar, btnExportar, btnSalir;
 
@@ -36,13 +36,6 @@ public class InterfazGrafica extends JFrame {
         panelBotones.add(btnExportar);
         panelBotones.add(btnSalir);
 
-        // Panel de entrada
-        JPanel panelEntrada = new JPanel();
-        panelEntrada.setLayout(new FlowLayout());
-        panelEntrada.add(new JLabel("Entrada:"));
-        inputField = new JTextField(40);
-        panelEntrada.add(inputField);
-
         // Área de resultados
         resultadoArea = new JTextArea(15, 60);
         resultadoArea.setEditable(false);
@@ -59,8 +52,7 @@ public class InterfazGrafica extends JFrame {
 
         // Agregar al frame
         add(panelBotones, BorderLayout.NORTH);
-        add(panelEntrada, BorderLayout.CENTER);
-        add(scrollPane, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
 
         setVisible(true);
     }
@@ -114,9 +106,8 @@ public class InterfazGrafica extends JFrame {
     }
 
     private void buscarContacto() {
-        String prefijo = inputField.getText();
-        if (prefijo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un prefijo a buscar.");
+        String prefijo = JOptionPane.showInputDialog(this, "Ingrese el prefijo a buscar:");
+        if (prefijo == null || prefijo.isEmpty()) {
             return;
         }
 
@@ -125,23 +116,22 @@ public class InterfazGrafica extends JFrame {
         if (resultados.isEmpty()) {
             resultadoArea.setText("No se encontraron contactos.");
         } else {
-            // Incrementar frecuencia y ordenar
+            // Incrementar frecuencia
             for (Contacto c : resultados) {
                 c.frecuencia++;
             }
 
-            for (int i = 0; i < resultados.size(); i++) {
-                for (int j = 0; j < resultados.size() - 1 - i; j++) {
-                    if (resultados.get(j).frecuencia < resultados.get(j + 1).frecuencia) {
-                        Contacto temp = resultados.get(j);
-                        resultados.set(j, resultados.get(j + 1));
-                        resultados.set(j + 1, temp);
-                    }
-                }
+            // Usar Heap para ordenar por frecuencia (descendente)
+            Comparator<Contacto> comparador = (c1, c2) -> Integer.compare(c2.frecuencia, c1.frecuencia);
+            Heap<Contacto> heap = new Heap<>(resultados.size(), true, comparador);
+            
+            for (Contacto c : resultados) {
+                heap.insertar(c);
             }
 
-            StringBuilder sb = new StringBuilder("Resultados encontrados:\n\n");
-            for (Contacto c : resultados) {
+            StringBuilder sb = new StringBuilder("Resultados para prefijo '" + prefijo + "' (ordenados por frecuencia):\n\n");
+            while (!heap.estaVacio()) {
+                Contacto c = heap.extraer();
                 sb.append(c).append(" [Búsquedas: ").append(c.frecuencia).append("]\n");
             }
             resultadoArea.setText(sb.toString());

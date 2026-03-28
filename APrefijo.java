@@ -68,8 +68,23 @@ public class APrefijo<E> {
             }
         }
         recolectar(actual, resultado);
+        
+        // Deduplicar por referencia (mismo objeto)
+        LinkedList<E> sinDuplicados = new LinkedList<>();
+        for (E elemento : resultado) {
+            boolean existe = false;
+            for (E existente : sinDuplicados) {
+                if (existente == elemento) { // Comparación de referencia
+                    existe = true;
+                    break;
+                }
+            }
+            if (!existe) {
+                sinDuplicados.add(elemento);
+            }
+        }
 
-        return resultado;
+        return sinDuplicados;
     }
 
     private void recolectar(APrefijo<E> nodo, LinkedList<E> resultado) {

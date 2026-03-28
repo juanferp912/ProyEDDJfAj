@@ -1,4 +1,6 @@
 public class Contacto {
+    static int contador = 0;  //para evitar que se dupliquen al buscar por prefijo
+    int id;
     String nombre;
     String apellido;
     String apodo;
@@ -9,6 +11,7 @@ public class Contacto {
 
     public Contacto(String nombre, String apellido, String apodo, String telefonoMovil, 
                     String telefonoConvencional, String correoElectronico) {
+        this.id = contador++;
         this.nombre = nombre;
         this.apellido = apellido;
         this.apodo = apodo;
